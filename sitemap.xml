@@ -29,15 +29,6 @@
   </url>
   
   <url>
-    <loc>http://example.com/2021/06/10/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/</loc>
-    
-    <lastmod>2024-12-05</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/2024/10/15/hello-world/</loc>
     
     <lastmod>2024-10-15</lastmod>
@@ -55,20 +46,6 @@
   </url>
 
   
-  <url>
-    <loc>http://example.com/tags/%E5%8E%9F%E5%88%9B/</loc>
-    <lastmod>2025-03-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
 
-  
-  <url>
-    <loc>http://example.com/categories/Java/</loc>
-    <lastmod>2025-03-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
   
 </urlset>
