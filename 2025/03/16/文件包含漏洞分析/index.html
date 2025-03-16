@@ -1,0 +1,295 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>文件包含漏洞分析 | heihei~</title><meta name="author" content="It is mine"><meta name="copyright" content="It is mine"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="文件包含漏洞分析什么是文件包含  像C语言中”#include&lt;stdio.h&gt;”就是把stdio.h这个头文件引入到当前环境中，在PHP中也有这样类似的函数，这些函数也是把外部的文件内容引入到当前环境。  比方说：   PHP中也有include(“”)里面配置的也是我们要引入的外部的文件名，不过在这里，它的文件是一个.php文件的话，它是会对它解析执行，这样子这个php当中，所有的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件包含漏洞分析">
+<meta property="og:url" content="http://example.com/2025/03/16/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="heihei~">
+<meta property="og:description" content="文件包含漏洞分析什么是文件包含  像C语言中”#include&lt;stdio.h&gt;”就是把stdio.h这个头文件引入到当前环境中，在PHP中也有这样类似的函数，这些函数也是把外部的文件内容引入到当前环境。  比方说：   PHP中也有include(“”)里面配置的也是我们要引入的外部的文件名，不过在这里，它的文件是一个.php文件的话，它是会对它解析执行，这样子这个php当中，所有的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/touxiang.jpg">
+<meta property="article:published_time" content="2025-03-16T13:05:30.000Z">
+<meta property="article:modified_time" content="2025-03-16T13:06:29.026Z">
+<meta property="article:author" content="It is mine">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/touxiang.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/03/16/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '文件包含漏洞分析',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="heihei~" type="application/atom+xml">
+</head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">heihei~</span></a><a class="nav-page-title" href="/"><span class="site-name">文件包含漏洞分析</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">文件包含漏洞分析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-16T13:05:30.000Z" title="发表于 2025-03-16 21:05:30">2025-03-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-16T13:06:29.026Z" title="更新于 2025-03-16 21:06:29">2025-03-16</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="文件包含漏洞分析"><a href="#文件包含漏洞分析" class="headerlink" title="文件包含漏洞分析"></a>文件包含漏洞分析</h1><h2 id="什么是文件包含"><a href="#什么是文件包含" class="headerlink" title="什么是文件包含"></a>什么是文件包含</h2><p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20241210210458941.png" alt="image-20241210210458941"></p>
+<ul>
+<li><p>像C语言中”#include&lt;stdio.h&gt;”就是把stdio.h这个头文件引入到当前环境中，在PHP中也有这样类似的函数，这些函数也是把外部的文件内容引入到当前环境。</p>
+</li>
+<li><p>比方说：</p>
+</li>
+</ul>
+<p>PHP中也有include(“”)里面配置的也是我们要引入的外部的文件名，不过在这里，它的文件是一个.php文件的话，它是会对它解析执行，这样子这个php当中，所有的文件的变量定义、函数，在接下来的代码当中都能够使用了。</p>
+<ul>
+<li>文件包含漏洞是怎么回事：</li>
+</ul>
+<p>它其实就发生在，当上面这些文件包含函数它们的参数由用户可控，或部分可控的时候，我们就说它存在了文件包含漏洞。</p>
+<p>​	- 比如说：在一个代码当中，像这样子的include这样的函数，它直接由用户传入了一个参数（include($_GET[file])）；</p>
+<p>​	- 再比如：说require($a)中$a受到了用户输入的影响；</p>
+<p>​	- 这个时候我们就说，用户指定的输入就被当作了文件包含函数的参数，这个时候，这个代码就很有可能出现文件包含漏洞。</p>
+<h2 id="文件包含利用的特点"><a href="#文件包含利用的特点" class="headerlink" title="文件包含利用的特点"></a>文件包含利用的特点</h2><p>先注意：再PHP文件的文件包含函数特点：</p>
+<ul>
+<li><p>文件包含的那个目标，他的内容是PHP，它将会解析执行</p>
+<p>举例：</p>
+<p>现在有一个文件包含函数include(“a.txt”),这个a.txt文件内容是一段php代码，这种情况下，这个”inciude(“a.txt”)”代码执行的结果就是a.txt当中包含的php代码被解析执行。</p>
+</li>
+<li><p>文件包含它的内容是普通文本，就会读取到文件内容</p>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20241210211515617.png" alt="image-20241210211515617"></p>
+<p>像上图这样文件包含的代码，从这个代码出发，能做的利用有两种：</p>
+<ul>
+<li><p>本地文件包含(LFI)</p>
+<p>这里填入的文件名是一个本地的文件名，这个时候利用的范围是相对来说比较受限的，只能用服务器上已经存在的文件作为文件包含的参数</p>
+</li>
+<li><p>远程文件包含(RFI)</p>
+<p>利用条件会更加严格，对于php.ini当中的配置也会有一定的要求，而且默认php.ini的配置是不允许远程文件包含的，</p>
+<p>如果一个代码中存在远程文件包含，甚至就可以作任意命令执行，可以直接拿到服务器的访问控制权，</p>
+<p>因为：文件包含函数遇到内容是php,会解析执行，我只需要再我的服务器上放一段恶意的php代码，然后用远程文件包含的这个漏洞去包含我那个服务器的恶意的php，就能实现任意命令执行操作。</p>
+</li>
+</ul>
+<p>接下来会以本地包含为主 ，远程能做的已经很多了，本地需要学习更多的技巧来突破他所带来的局限性。</p>
+<p>局限1： 如果我们想要得到的目标是去读取php的源代码，不想要后端源代码的执行结果（直接访问php文件就可），有些情况通过文件包含的方式去执行php代码，不能通过文件访问的方式执行php代码，</p>
+<p>局限2：我们知道本地文件包含的前提是我们想要一个文件包含的结果，他必须在本地服务器上存在对应的文件，需要一种办法可以任意的决定文件包含的结果。</p>
+<p>想要突破本地文件包含的一些限制的话，需要一个工具：php伪协议。</p>
+<h2 id="PHP伪协议"><a href="#PHP伪协议" class="headerlink" title="PHP伪协议"></a>PHP伪协议</h2><p>伪协议：它长得像协议一样，它完成的是一些像协议的事情，但它本身不是一个协议。</p>
+<h3 id="file-协议"><a href="#file-协议" class="headerlink" title="file:&#x2F;&#x2F;协议"></a>file:&#x2F;&#x2F;协议</h3><p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20241210233431417.png" alt="image-20241210233431417"></p>
+<p>如果file参数被放到像include()文件包含函数里面的话，那么D盘&#x2F;soft…里面的phpcode.txt文件就会被包含进去，如果这个文件的内容是php代码的话，它就会解析执行，即使它的扩展名是.txt；如果它的文件内容是普通文本的话，普通文本的内容就会被作为文件包含的结果。</p>
+<h3 id="php-input协议"><a href="#php-input协议" class="headerlink" title="php:&#x2F;&#x2F;input协议"></a>php:&#x2F;&#x2F;input协议</h3><p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20241210234012598.png" alt="image-20241210234012598"></p>
+<p>当文件包含函数遇到php:&#x2F;&#x2F;input伪协议（include(“php:&#x2F;&#x2F;input”))的时候，它就会把POST的内容当作文件包含的结果。</p>
+<p>例如：</p>
+<p> <img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20241210235158012.png" alt="image-20241210235158012"></p>
+<p>在这里把php:&#x2F;&#x2F;input传入参数filename里面，参数后续会被放到文件包含的函数里面，这个时候我给他POST了一段php代码”<?php system('whoami');?>“,</p>
+<p>它的结果是这段php代码解析执行后的结果，我让他执行woami,它就把当前的系统的用户名给输出出来了。</p>
+<p>所以，php:&#x2F;&#x2F;input伪协议</p>
+<p>可以用于执行php代码，（前提条件：allow_url_include是一个打开的状态）</p>
+<p>可以用于控制文件包含的结果。 </p>
+<h3 id="phar-伪协议"><a href="#phar-伪协议" class="headerlink" title="phar:&#x2F;&#x2F;伪协议"></a>phar:&#x2F;&#x2F;伪协议</h3><p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20241211121432002.png" alt="image-20241211121432002"></p>
+<p>xxx.png这个扩展名看起来是一个图片，遇到phar:&#x2F;&#x2F;伪协议，还是会当作压缩包来处理，会读取这个压缩包内部的shell.php文件。</p>
+<p>用途：</p>
+<p>文件上传漏洞组合拳：</p>
+<p>文件上传的一大难点是限制扩展名，如果现在只允许上传zip压缩包，要实现任意命令执行该怎么办？——如果同时找到文件包含漏洞，就可以把一句话木马压缩到zip压缩包里面，</p>
+<p>这种情况下配合phar:&#x2F;&#x2F;伪协议:(?file&#x3D;phar:&#x2F;&#x2F;zip&#x2F;trojan.php)就可以把这个压缩包里面的所包含的这个木马做解析执行的操作。</p>
+<h3 id="zip-伪协议"><a href="#zip-伪协议" class="headerlink" title="zip:&#x2F;&#x2F;伪协议"></a>zip:&#x2F;&#x2F;伪协议</h3><p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20241211122647534.png" alt="image-20241211122647534"></p>
+<h3 id="php-filter（本地磁盘文件进行读取）"><a href="#php-filter（本地磁盘文件进行读取）" class="headerlink" title="php:&#x2F;&#x2F;filter（本地磁盘文件进行读取）"></a>php:&#x2F;&#x2F;filter（本地磁盘文件进行读取）</h3><p>![](C:\Users\lenovo\Pictures\Screenshots\屏幕截图 2024-12-11 124243.png)</p>
+<p>看下面这个例子：</p>
+<p>从右向左读：读取xxx.php这个文件内容，把它作为读取的源头（resource),接着对它做编码的转换，把它读取进来之后把它放到一个文件包含函数里面（filename);</p>
+<p>原本文件包含函数include(xxx,php)直接往里面传一个php，会解析执行，把它解析执行的结果作为文件包含的结果，现在有了php:&#x2F;&#x2F;filter伪协议，将原本php代码的文件转换成不是php代码的格式（对它做编码了），作为普通文本，会把内容原封不动读取出来。</p>
+<p>php:&#x2F;&#x2F;filter伪协议是用于突破做php代码的源代码读取。</p>
+<h3 id="data"><a href="#data" class="headerlink" title="data:&#x2F;&#x2F;"></a>data:&#x2F;&#x2F;</h3><p>data 伪协议是 PHP 中的一个特殊协议，它允许将原始数据嵌入到 URL 中。通过文件包含漏洞，我们可以利用这个 伪协议，将恶意 PHP 代码作为数据嵌入，并让服务器解释执行。 </p>
+<p>data 伪协议 格式：</p>
+<p> data:&#x2F;&#x2F;{}{,base64}, MIME-type：指定数据的类型，默认是 text&#x2F;plain。 charset：指定数据的编码类型，如 utf8，默认是这个类型，所以直接不显示。 base64：如果使用 Base64 编码，则加上该标识。 data：实际的数据内 容。</p>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="1-利用php-input"><a href="#1-利用php-input" class="headerlink" title="1.利用php:&#x2F;&#x2F;input"></a>1.利用php:&#x2F;&#x2F;input</h3><p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-12-11%20124539.png"></p>
+<p>代码分析：</p>
+<ol start="2">
+<li><p>把flag包含进去；</p>
+</li>
+<li><p>把当前的代码再页面上展示；</p>
+</li>
+<li><p>extract()函数：能够把数组变成变量名和变量名的声明；在这里把$_GET这个数组作为了estract这个函数的参数，这行代码执行后，用户传入的所有GET请求的参数，它的参数值就是变量值，参数名就变成了变量名；</p>
+<p>如果现在发送的请求是：&#x2F;？a&#x3D;1&amp;b&#x3D;2,传了两个GET请求的参数，那么这行代码执行会就会变成：$a&#x3D;1;$b&#x3D;2;</p>
+<p>后面的aurora1,aurora2…都可以传入GET型请求参数的方式对他的变量值进行定义；</p>
+</li>
+<li><p>判断aurora1的值是否为空；</p>
+</li>
+<li><p>把传入的aurora2作为文件包含的参数，也就是说把aurora2作为一个文件名，放入文件包含函数里面；</p>
+<p>注意：aurora2是由用户可控的，这里就有了文件包含漏洞；</p>
+<p>把aurora2这个文件读取出来后，去除首尾空格（trin()），把它的结果给aurora3，</p>
+</li>
+<li><p>核对：aurora1,3是否相等；</p>
+</li>
+</ol>
+<p>这个题目原本的目的&#x2F;最直接的想法：</p>
+<p>假如知道服务器里的一个文件和文件内容就好了，比如说，我们知道服务器有一个文件a.txt它的内容是123，那我们在aurora1里传入123，在2里传入a.txt，就满足条件，输出flag;</p>
+<p>关键在于：不知道服务器上有什么文件，也不知内容；</p>
+<p>解决办法：</p>
+<p>php:&#x2F;&#x2F;input伪协议（把POST内容当作文件包含的结果）</p>
+<p>在aurora2这里用php:&#x2F;&#x2F;input作为参数传进去，那么aurora3这里的结果就由我们可控了</p>
+<p>具体操作：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-12-11%20131900.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20241211132708945.png" alt="image-20241211132708945"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-12-11%20132124.png"></p>
+<h3 id="2"><a href="#2" class="headerlink" title="2."></a>2.</h3><p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20241211134636729.png" alt="image-20241211134636729"></p>
+<ol start="2">
+<li><ol start="3">
+<li><ol start="4">
+<li>：从GET参数里面接收3个变量，user，file，pass，</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>判断user有没有set，然后从user 里面去读文件包含（这里有漏洞点），让文件包含结果&#x3D;&#x3D;the user is admin，用php:&#x2F;&#x2F;input伪协议；</p>
+</li>
+<li><p>进入题目第二步；把file作为文件包含的参数（也是文件包含漏洞）；</p>
+<p>后面给了一个提示：好像想让我们包含class.php进去，但我们不知道class.php是什么，因此我们读取它的源代码，</p>
+</li>
+</ol>
+<p>解题：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-12-11%20192012.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20241211192104866.png" alt="image-20241211192104866"></p>
+<p>进行base64解码；</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20241211192224031.png" alt="image-20241211192224031"></p>
+<ol start="2">
+<li>定义了一个类Read,</li>
+<li>有一个成员变量或一个属性，它的值是file，</li>
+<li>有一个魔术方法toString():把对象当作字符串来使用的时候，就会自动调用它的toString魔术方法，</li>
+<li>如果file有内容的话，</li>
+<li>就把它放在文件包含函数里面，</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20241211192958015.png" alt="image-20241211192958015"></p>
+<ol start="8">
+<li><p>如果传人的file包含f1a9的话，（f1a9这个文件肯定很可疑，）</p>
+</li>
+<li><p>程序退出</p>
+<p>因此，我们要设法把f1a9这个文件读取出来，</p>
+</li>
+<li><p>对pass这个参数做反序列化操作，</p>
+</li>
+<li><p>输出反序列化的对象；这里触发了上面魔术方法的触发条件，这个反序列化后的结果输出了出来，其实就是把反序列化这个Read对象当作字符串来用，相应的就会调用toString魔术方法，</p>
+</li>
+</ol>
+<p>如果往12中传入的Read对象是一个file属性是一个f1a9.php源代码的属性，这个时候在后续13echo反序列化结果的时候，就会自动调用toString魔术方法，而这个魔术方法会自然而然的把Read这个file属性放到文件包含函数的参数里面，这时就变相的把f1a9.php的内容给读取出来了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20241211194748494.png" alt="image-20241211194748494"></p>
+<ol start="14">
+<li>进行序列化；</li>
+</ol>
+<p>后续把序列化内容放到index.php 12中。</p>
+<h3 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h3><p><a target="_blank" rel="noopener" href="https://www.nssctf.cn/problem/2821">https://www.nssctf.cn/problem/2821</a></p>
+<h3 id="4-phar"><a href="#4-phar" class="headerlink" title="4.phar:&#x2F;&#x2F;"></a>4.phar:&#x2F;&#x2F;</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/abc18964814133/article/details/124664538">伪协议解释+一道例题解析</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.nssctf.cn/problem/2026">例题</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/bkofyZ/p/17624634.html">解析</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">It is mine</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/03/16/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">http://example.com/2025/03/16/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">heihei~</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/image/touxiang.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/03/16/%E2%80%9D%E6%9C%89%E5%85%B3RCE%E3%80%81SQL%E9%A2%98%E7%9B%AE%E2%80%9C/" title="”有关RCE、SQL题目“"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">”有关RCE、SQL题目“</div></div><div class="info-2"><div class="info-item-1">有关RCE、SQL题目1.[NSSRound#8 Basic]MyDoor 什么也没有， php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;index.php 然后解码：  php error_reporting(0);  if (isset($_GET['N_S.S'])) {     eval($_GET['N_S.S']); }  if(!isset($_GET['file'])) {     header('Location:/index.php?file='); } else {     $file = $_GET['file'];      if (!preg_match('/\.\.|la|data|input|glob|global|var|dict|gopher|file|http|phar|localhost|\?|\*|\~|zip|7z|compress/is', $file)) {         include $file;     } else {       ...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">It is mine</div><div class="author-info-description">我是一个自律的人，一天三顿少一顿都不行</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">文件包含漏洞分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-number">1.1.</span> <span class="toc-text">什么是文件包含</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E5%88%A9%E7%94%A8%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text">文件包含利用的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E4%BC%AA%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.</span> <span class="toc-text">PHP伪协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#file-%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.1.</span> <span class="toc-text">file:&#x2F;&#x2F;协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#php-input%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.2.</span> <span class="toc-text">php:&#x2F;&#x2F;input协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#phar-%E4%BC%AA%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.3.</span> <span class="toc-text">phar:&#x2F;&#x2F;伪协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zip-%E4%BC%AA%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.3.4.</span> <span class="toc-text">zip:&#x2F;&#x2F;伪协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#php-filter%EF%BC%88%E6%9C%AC%E5%9C%B0%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E8%BF%9B%E8%A1%8C%E8%AF%BB%E5%8F%96%EF%BC%89"><span class="toc-number">1.3.5.</span> <span class="toc-text">php:&#x2F;&#x2F;filter（本地磁盘文件进行读取）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#data"><span class="toc-number">1.3.6.</span> <span class="toc-text">data:&#x2F;&#x2F;</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-number">1.4.</span> <span class="toc-text">例题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%A9%E7%94%A8php-input"><span class="toc-number">1.4.1.</span> <span class="toc-text">1.利用php:&#x2F;&#x2F;input</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2"><span class="toc-number">1.4.2.</span> <span class="toc-text">2.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3"><span class="toc-number">1.4.3.</span> <span class="toc-text">3.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-phar"><span class="toc-number">1.4.4.</span> <span class="toc-text">4.phar:&#x2F;&#x2F;</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/16/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" title="文件包含漏洞分析">文件包含漏洞分析</a><time datetime="2025-03-16T13:05:30.000Z" title="发表于 2025-03-16 21:05:30">2025-03-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/16/%E2%80%9D%E6%9C%89%E5%85%B3RCE%E3%80%81SQL%E9%A2%98%E7%9B%AE%E2%80%9C/" title="”有关RCE、SQL题目“">”有关RCE、SQL题目“</a><time datetime="2025-03-16T12:44:00.000Z" title="发表于 2025-03-16 20:44:00">2025-03-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/15/hello-world/" title="Hello World">Hello World</a><time datetime="2024-10-15T04:53:53.440Z" title="发表于 2024-10-15 12:53:53">2024-10-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By It is mine</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
