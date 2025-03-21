@@ -1,0 +1,265 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>RCE1.0 | heihei~</title><meta name="author" content="It is mine"><meta name="copyright" content="It is mine"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1.[NSSRound#8 Basic]MyDoor 什么也没有， php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;index.php 然后解码：  12345678910111213141516171819**&#96;&lt;?php&#96;**error_reporting(0);&#96;**if (isset($_GET">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RCE1.0">
+<meta property="og:url" content="http://example.com/2025/03/21/RCE1-0/index.html">
+<meta property="og:site_name" content="heihei~">
+<meta property="og:description" content="1.[NSSRound#8 Basic]MyDoor 什么也没有， php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;index.php 然后解码：  12345678910111213141516171819**&#96;&lt;?php&#96;**error_reporting(0);&#96;**if (isset($_GET">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/touxiang.jpg">
+<meta property="article:published_time" content="2025-03-21T12:55:21.000Z">
+<meta property="article:modified_time" content="2025-03-21T12:58:20.628Z">
+<meta property="article:author" content="It is mine">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/touxiang.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/03/21/RCE1-0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RCE1.0',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="heihei~" type="application/atom+xml">
+</head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">heihei~</span></a><a class="nav-page-title" href="/"><span class="site-name">RCE1.0</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">RCE1.0</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-21T12:55:21.000Z" title="发表于 2025-03-21 20:55:21">2025-03-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-21T12:58:20.628Z" title="更新于 2025-03-21 20:58:20">2025-03-21</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="1-NSSRound-8-Basic-MyDoor"><a href="#1-NSSRound-8-Basic-MyDoor" class="headerlink" title="1.[NSSRound#8 Basic]MyDoor"></a>1.[NSSRound#8 Basic]MyDoor</h2><p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20150213.png"></p>
+<p>什么也没有，</p>
+<p>php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;index.php</p>
+<p>然后解码：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20145921.png"></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">**`<span class="meta">&lt;?php</span>`**</span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);`**</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;N_S.S&#x27;</span>])) &#123;</span><br><span class="line">    <span class="keyword">eval</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;N_S.S&#x27;</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>])) </span><br><span class="line">    <span class="title function_ invoke__">header</span>(<span class="string">&#x27;Location:/index.php?file=&#x27;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="variable">$file</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/\.\.|la|data|input|glob|global|var|dict|gopher|file|http|phar|localhost|\?|\*|\~|zip|7z|compress/is&#x27;</span>, <span class="variable">$file</span>)) &#123;</span><br><span class="line">        <span class="keyword">include</span> <span class="variable">$file</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;error.&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>error_reporting(0);</code></strong> 关闭了所有的错误报告。</p>
+<ul>
+<li>因为_作为参数在php是非法的，所以需要用[来替代</li>
+</ul>
+<p><strong><code>eval($_GET[&#39;N_S.S&#39;]);</code></strong></p>
+<ul>
+<li>如果 URL 参数 <code>N_S.S</code> 存在，会将其内容作为 PHP 代码执行</li>
+</ul>
+<p><strong>文件包含逻辑</strong></p>
+<ul>
+<li>如果 URL 参数 <code>file</code> 不存在，会重定向到 <code>index.php?file=</code>。</li>
+<li>如果 <code>file</code> 参数存在，会检查其值是否包含黑名单中的字符串（如 <code>..</code>, <code>la</code>, <code>data</code>, <code>input</code>, <code>glob</code>, <code>gopher</code>, <code>file</code>, <code>http</code>, <code>phar</code>, <code>localhost</code>, <code>?</code>, <code>*</code>, <code>~</code>, <code>zip</code>, <code>7z</code>, <code>compress</code> 等）。</li>
+<li>如果 <code>file</code> 参数的值通过黑名单检查，会将其作为文件路径包含进来（<code>include $file;</code>）</li>
+</ul>
+<p>在php中变量名字是由数字字母和下划线组成的，所以不论用post还是get传入变量名的时候，php会将怪异的变量名转换成有效的，在进行解析时会删除空白符，并将空格、+、点、[ 转换为下划线。但是用一个特性是可以绕过的，就是当 [ 提前出现后，[ 会转换成下划线，而后面的字符就不会再被转义了。</p>
+<p>方法一：</p>
+<p>有些题目会将 flag 或敏感信息存储在环境变量中。通过 <code>env</code> 命令可以快速查看当前环境变量，寻找可能的线索。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%25E5%25B1%258F%25E5%25B9%2595%25E6%2588%25AA%25E5%259B%25BE%25202025-03-16%2520151649.png"></p>
+<p>NSSCTF{61c40417-c85a-4942-9ea4-372a0816557c}</p>
+<p>方法二：</p>
+<p><code>phpinfo()</code> 是 PHP 中的一个内置函数，用于<strong>显示当前 PHP 环境的配置信息</strong>。它会输出一个详细的 HTML 页面，包含 PHP 版本、服务器信息、加载的扩展、配置文件路径、环境变量等信息。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20250318194528793.png" alt="image-20250318194528793"></p>
+<h2 id="2-MoeCTF-2021-babyRCE"><a href="#2-MoeCTF-2021-babyRCE" class="headerlink" title="2.[MoeCTF 2021]babyRCE"></a>2.[MoeCTF 2021]babyRCE</h2><p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20154052.png"></p>
+<ol>
+<li>禁止使用 cat more less head tac tail nl od vi vim sort（防止读取文件）。</li>
+<li>禁止使用 空格（ ）、分号（;）、数字（0-9）、星号（*）、反引号（&#96;）、百分号（%）、重定向符号（&gt; &lt;）、引号（’ “）</li>
+<li>过滤了空格的话，用${IFS}</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20154308.png"></p>
+<p>直接cat,</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20154504.png"></p>
+<p>啥也没有，查看源代码；</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20154531.png"></p>
+<p>NSSCTF{c09a935e-7121-4336-909b-f9e82dd27d79}</p>
+<h2 id="3-SWPUCTF-2023-秋季新生赛-RCE-PLUS"><a href="#3-SWPUCTF-2023-秋季新生赛-RCE-PLUS" class="headerlink" title="3.[SWPUCTF 2023 秋季新生赛]RCE-PLUS"></a>3.[SWPUCTF 2023 秋季新生赛]RCE-PLUS</h2><p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20171105.png"></p>
+<ol>
+<li><strong><code>error_reporting(0);</code></strong><ul>
+<li>关闭错误提示，防止泄露敏感信息。</li>
+</ul>
+</li>
+<li><strong><code>highlight_file(__FILE__);</code></strong><ul>
+<li>高亮显示当前文件的源代码。</li>
+</ul>
+</li>
+<li><strong><code>strCheck</code> 函数</strong><ul>
+<li>对用户输入的 <code>cmd</code> 参数进行黑名单过滤。</li>
+<li>黑名单包括：<ul>
+<li>特殊字符：<code>;</code>, <code>&amp;</code>, <code>$</code>, <code>\x09</code>（Tab 键）, <code>\x26</code>（&amp; 的十六进制表示）。</li>
+<li>常见命令：<code>more</code>, <code>less</code>, <code>head</code>, <code>sort</code>, <code>tail</code>, <code>sed</code>, <code>cut</code>, <code>awk</code>, <code>strings</code>, <code>od</code>, <code>php</code>, <code>ping</code>, <code>flag</code>。</li>
+</ul>
+</li>
+<li>如果输入包含黑名单中的内容，程序会终止并输出 <code>i hate this</code>。</li>
+</ul>
+</li>
+<li><strong>命令执行逻辑</strong><ul>
+<li>从 URL 参数 <code>cmd</code> 获取用户输入。</li>
+<li>调用 <code>strCheck</code> 函数对输入进行检查。</li>
+<li>如果通过检查，使用 <code>shell_exec($cmd);</code> 执行命令。</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>黑名单过滤了一些特殊字符和常见命令，但可以通过以下方法绕过：<ul>
+<li><strong>使用未过滤的命令</strong>：<ul>
+<li>例如：<code>ls</code>, <code>cat</code>, <code>tac</code>, <code>nl</code>, <code>rev</code>, <code>grep</code>, <code>find</code>, <code>echo</code> 等。</li>
+</ul>
+</li>
+<li><strong>使用通配符</strong>：<ul>
+<li>例如：<code>*</code> 可以匹配任意字符。</li>
+</ul>
+</li>
+<li><strong>使用未过滤的管道符</strong>：<ul>
+<li>例如：<code>|</code>（管道符）未被过滤，可以用于连接多个命令。</li>
+</ul>
+</li>
+<li><strong>使用编码绕过</strong>：<ul>
+<li>例如：将命令编码为十六进制或 Base64，然后解码执行。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong><code>/?cmd=ls /|tee a.txt</code></strong></p>
+<ol>
+<li><strong><code>tee a.txt</code></strong><ul>
+<li><code>tee</code> 是一个 Linux 命令，用于将输入内容同时输出到屏幕和文件中。</li>
+<li><code>tee a.txt</code> 会将 <code>ls /</code> 的结果输出到屏幕，并保存到 <code>a.txt</code> 文件中。</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20250316171420268.png" alt="image-20250316171420268"></p>
+<p>接着  &#x2F;?cmd&#x3D;cat &#x2F;f*|tee a.txt</p>
+<p>再访问a.xt</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20250316171742247.png" alt="image-20250316171742247"></p>
+<h2 id="4-SWPUCTF-2023-秋季新生赛-Pingpingping"><a href="#4-SWPUCTF-2023-秋季新生赛-Pingpingping" class="headerlink" title="4.[SWPUCTF 2023 秋季新生赛]Pingpingping"></a>4.[SWPUCTF 2023 秋季新生赛]Pingpingping</h2><p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20201434.png"></p>
+<p>需要我们以<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=get&spm=1001.2101.3001.7020">get</a>的方式提交参数Ping_ip.exe。然后我们提交的参数会在system()函数中与<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=ping%E5%91%BD%E4%BB%A4&spm=1001.2101.3001.7020">ping命令</a>连接在一起进行执行。</p>
+<p>这里面的ping命令形式是不完整的，所以我们必须要先补全我们的ping命令再进行cat命令抓取。</p>
+<p>ping命令的最基本形式只需包含目标主机的地址。我们只需要将它所给出的ping命令加上主机地址即可。这里我测试的是任何ip都可以。</p>
+<p>?Ping[ip.exe&#x3D;127.0.0.1||cat &#x2F;flag</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20201749.png"></p>
+<h2 id="5-FSCTF-2023-细狗2-0"><a href="#5-FSCTF-2023-细狗2-0" class="headerlink" title="5.[FSCTF 2023]细狗2.0"></a>5.[FSCTF 2023]细狗2.0</h2><ol>
+<li></li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20250316172351404.png" alt="image-20250316172351404"></p>
+<p><img src="/.com//Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20250316172334144.png" alt="image-20250316172334144"></p>
+<p>2.发现有两个php，我们尝试用cat命令查看一下 ,尝试后构造出最终的payload</p>
+<p>过滤了空格和cat 空格用${<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=IFS&spm=1001.2101.3001.7020">IFS</a>}替换就行 cat用nl代替</p>
+<p>1;nl${IFS}&#x2F;f*</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20172713.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">It is mine</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/03/21/RCE1-0/">http://example.com/2025/03/21/RCE1-0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">heihei~</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/image/touxiang.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/03/18/web-RCE-SQL-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-01/" title="web.RCE.SQL.文件上传.01"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">web.RCE.SQL.文件上传.01</div></div><div class="info-2"><div class="info-item-1">1.[NSSRound#8 Basic]MyDoor 什么也没有， php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;index.php 然后解码：  12345678910111213141516171819**`&lt;?php`**error_reporting(0);`**if (isset($_GET[&#x27;N_S.S&#x27;])) &#123;    eval($_GET[&#x27;N_S.S&#x27;]);&#125;if(!isset($_GET[&#x27;file&#x27;]))     header(&#x27;Location:/index.php?file=&#x27;);&#125; else &#123;    $file = $_GET[&#x27;file&#x27;];    if...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">It is mine</div><div class="author-info-description">我是一个自律的人，一天三顿少一顿都不行</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-NSSRound-8-Basic-MyDoor"><span class="toc-number">1.</span> <span class="toc-text">1.[NSSRound#8 Basic]MyDoor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-MoeCTF-2021-babyRCE"><span class="toc-number">2.</span> <span class="toc-text">2.[MoeCTF 2021]babyRCE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-SWPUCTF-2023-%E7%A7%8B%E5%AD%A3%E6%96%B0%E7%94%9F%E8%B5%9B-RCE-PLUS"><span class="toc-number">3.</span> <span class="toc-text">3.[SWPUCTF 2023 秋季新生赛]RCE-PLUS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-SWPUCTF-2023-%E7%A7%8B%E5%AD%A3%E6%96%B0%E7%94%9F%E8%B5%9B-Pingpingping"><span class="toc-number">4.</span> <span class="toc-text">4.[SWPUCTF 2023 秋季新生赛]Pingpingping</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-FSCTF-2023-%E7%BB%86%E7%8B%972-0"><span class="toc-number">5.</span> <span class="toc-text">5.[FSCTF 2023]细狗2.0</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/21/RCE1-0/" title="RCE1.0">RCE1.0</a><time datetime="2025-03-21T12:55:21.000Z" title="发表于 2025-03-21 20:55:21">2025-03-21</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/18/web-RCE-SQL-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0-01/" title="web.RCE.SQL.文件上传.01">web.RCE.SQL.文件上传.01</a><time datetime="2025-03-18T13:30:14.000Z" title="发表于 2025-03-18 21:30:14">2025-03-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/16/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" title="文件包含漏洞分析">文件包含漏洞分析</a><time datetime="2025-03-16T13:05:30.000Z" title="发表于 2025-03-16 21:05:30">2025-03-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/15/hello-world/" title="Hello World">Hello World</a><time datetime="2024-10-15T04:53:53.440Z" title="发表于 2024-10-15 12:53:53">2024-10-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By It is mine</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
