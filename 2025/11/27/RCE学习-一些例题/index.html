@@ -1,0 +1,344 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>RCE学习~一些例题 | 运启霖泽</title><meta name="author" content="It is mine"><meta name="copyright" content="It is mine"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="RCE学习~一些例题一些相关函数   函数 返回值 是否直接输出 适用场景    system() 最后一行 是 快速执行并显示   passthru() 无（原始输出） 是 二进制数据（如图片）   exec() 最后一行/数组 否 需处理输出的命令   shell_exec() 完整字符串 否 捕获全部输出   popen() 文件指针 否 交互式命令   proc_open() 进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RCE学习~一些例题">
+<meta property="og:url" content="http://example.com/2025/11/27/RCE%E5%AD%A6%E4%B9%A0-%E4%B8%80%E4%BA%9B%E4%BE%8B%E9%A2%98/index.html">
+<meta property="og:site_name" content="运启霖泽">
+<meta property="og:description" content="RCE学习~一些例题一些相关函数   函数 返回值 是否直接输出 适用场景    system() 最后一行 是 快速执行并显示   passthru() 无（原始输出） 是 二进制数据（如图片）   exec() 最后一行/数组 否 需处理输出的命令   shell_exec() 完整字符串 否 捕获全部输出   popen() 文件指针 否 交互式命令   proc_open() 进">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/tx2.png">
+<meta property="article:published_time" content="2025-11-27T13:47:03.000Z">
+<meta property="article:modified_time" content="2025-11-27T13:47:38.938Z">
+<meta property="article:author" content="It is mine">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/tx2.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/11/27/RCE%E5%AD%A6%E4%B9%A0-%E4%B8%80%E4%BA%9B%E4%BE%8B%E9%A2%98/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RCE学习~一些例题',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/css/modify.css"><link rel="stylesheet" href="/styles/main.css"><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="运启霖泽" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image: url(url(https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/background.png));"></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/bg.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">运启霖泽</span></a><a class="nav-page-title" href="/"><span class="site-name">RCE学习~一些例题</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">RCE学习~一些例题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-27T13:47:03.000Z" title="发表于 2025-11-27 21:47:03">2025-11-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-27T13:47:38.938Z" title="更新于 2025-11-27 21:47:38">2025-11-27</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><div class="top-img" style="background-image: url(/image/bg.jpg);"></div><article class="container post-content" id="article-container"><h1 id="RCE学习-一些例题"><a href="#RCE学习-一些例题" class="headerlink" title="RCE学习~一些例题"></a>RCE学习~一些例题</h1><h2 id="一些相关函数"><a href="#一些相关函数" class="headerlink" title="一些相关函数"></a>一些相关函数</h2><table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">返回值</th>
+<th align="left">是否直接输出</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>system()</code></td>
+<td align="left">最后一行</td>
+<td align="left">是</td>
+<td align="left">快速执行并显示</td>
+</tr>
+<tr>
+<td align="left"><code>passthru()</code></td>
+<td align="left">无（原始输出）</td>
+<td align="left">是</td>
+<td align="left">二进制数据（如图片）</td>
+</tr>
+<tr>
+<td align="left"><code>exec()</code></td>
+<td align="left">最后一行/数组</td>
+<td align="left">否</td>
+<td align="left">需处理输出的命令</td>
+</tr>
+<tr>
+<td align="left"><code>shell_exec()</code></td>
+<td align="left">完整字符串</td>
+<td align="left">否</td>
+<td align="left">捕获全部输出</td>
+</tr>
+<tr>
+<td align="left"><code>popen()</code></td>
+<td align="left">文件指针</td>
+<td align="left">否</td>
+<td align="left">交互式命令</td>
+</tr>
+<tr>
+<td align="left"><code>proc_open()</code></td>
+<td align="left">进程资源</td>
+<td align="left">否</td>
+<td align="left">高级进程控制</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">passthru(string $command, int &amp;$return_var = ?): void</span><br><span class="line">passthru('')</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>**<code>$command</code>**：要执行的系统命令（如 <code>ls</code>、<code>id</code>）。</li>
+<li>**<code>&amp;$return_var</code>**（可选）：存储命令的 <strong>退出状态码</strong>（0 表示成功，非 0 表示失败）</li>
+</ul>
+<h2 id="读取文件的命令"><a href="#读取文件的命令" class="headerlink" title="读取文件的命令"></a>读取文件的命令</h2><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">more:一页一页的显示档案内容</span><br><span class="line">less:与 more 类似</span><br><span class="line">head:查看头几行</span><br><span class="line">tac:从最后一行开始显示，可以看出 tac 是 cat 的反向显示</span><br><span class="line">tail:查看尾几行</span><br><span class="line">nl：显示的时候，顺便输出行号</span><br><span class="line">od:以二进制的方式读取档案内容</span><br><span class="line">vi:一种编辑器，这个也可以查看</span><br><span class="line">vim:一种编辑器，这个也可以查看</span><br><span class="line">sort:可以查看</span><br><span class="line">uniq:可以查看</span><br><span class="line">ls /:列出根目录所有文件和目录</span><br><span class="line"><span class="comment">//&lt;,&lt;&gt;,${IFS},$IFS，%20(space),%09(tab),$IFS$9,$IFS$1空格代替</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="题目一"><a href="#题目一" class="headerlink" title="题目一"></a>题目一</h2><p>[NSSRound#8 Basic]MyDoor</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20150213.png"></p>
+<p>什么也没有，</p>
+<p>php://filter/convert.base64-encode/resource=index.php</p>
+<p>然后解码：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20145921.png"></p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">**`<span class="meta">&lt;?php</span>`**</span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);`**</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">'N_S.S'</span>])) {</span><br><span class="line">    <span class="keyword">eval</span>(<span class="variable">$_GET</span>[<span class="string">'N_S.S'</span>]);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">'file'</span>])) </span><br><span class="line">    <span class="title function_ invoke__">header</span>(<span class="string">'Location:/index.php?file='</span>);</span><br><span class="line">} <span class="keyword">else</span> {</span><br><span class="line">    <span class="variable">$file</span> = <span class="variable">$_GET</span>[<span class="string">'file'</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!<span class="title function_ invoke__">preg_match</span>(<span class="string">'/\.\.|la|data|input|glob|global|var|dict|gopher|file|http|phar|localhost|\?|\*|\~|zip|7z|compress/is'</span>, <span class="variable">$file</span>)) {</span><br><span class="line">        <span class="keyword">include</span> <span class="variable">$file</span>;</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">'error.'</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong><code>error_reporting(0);</code></strong> 关闭了所有的错误报告。</p>
+<ul>
+<li>因为_作为参数在php是非法的，所以需要用[来替代</li>
+</ul>
+<p><strong><code>eval($_GET['N_S.S']);</code></strong></p>
+<ul>
+<li>如果 URL 参数 <code>N_S.S</code> 存在，会将其内容作为 PHP 代码执行</li>
+</ul>
+<p><strong>文件包含逻辑</strong></p>
+<ul>
+<li>如果 URL 参数 <code>file</code> 不存在，会重定向到 <code>index.php?file=</code>。</li>
+<li>如果 <code>file</code> 参数存在，会检查其值是否包含黑名单中的字符串（如 <code>..</code>, <code>la</code>, <code>data</code>, <code>input</code>, <code>glob</code>, <code>gopher</code>, <code>file</code>, <code>http</code>, <code>phar</code>, <code>localhost</code>, <code>?</code>, <code>*</code>, <code>~</code>, <code>zip</code>, <code>7z</code>, <code>compress</code> 等）。</li>
+<li>如果 <code>file</code> 参数的值通过黑名单检查，会将其作为文件路径包含进来（<code>include $file;</code>）</li>
+</ul>
+<p>在php中变量名字是由数字字母和下划线组成的，所以不论用post还是get传入变量名的时候，php会将怪异的变量名转换成有效的，在进行解析时会删除空白符，并将空格、+、点、[ 转换为下划线。但是用一个特性是可以绕过的，就是当 [ 提前出现后，[ 会转换成下划线，而后面的字符就不会再被转义了。</p>
+<p>方法一：</p>
+<p>有些题目会将 flag 或敏感信息存储在环境变量中。通过 <code>env</code> 命令可以快速查看当前环境变量，寻找可能的线索。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%25E5%25B1%258F%25E5%25B9%2595%25E6%2588%25AA%25E5%259B%25BE%25202025-03-16%2520151649.png"></p>
+<p>NSSCTF{61c40417-c85a-4942-9ea4-372a0816557c}</p>
+<p>方法二：</p>
+<p><code>phpinfo()</code> 是 PHP 中的一个内置函数，用于<strong>显示当前 PHP 环境的配置信息</strong>。它会输出一个详细的 HTML 页面，包含 PHP 版本、服务器信息、加载的扩展、配置文件路径、环境变量等信息。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20250318194528793.png" alt="image-20250318194528793"></p>
+<h2 id="题目二"><a href="#题目二" class="headerlink" title="题目二"></a>题目二</h2><p>[MoeCTF 2021]babyRCE</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20154052.png"></p>
+<ol>
+<li>禁止使用 cat more less head tac tail nl od vi vim sort（防止读取文件）。</li>
+<li>禁止使用 空格（ ）、分号（;）、数字（0-9）、星号（*）、反引号（`）、百分号（%）、重定向符号（&gt; &lt;）、引号（’ “）</li>
+<li>过滤了空格的话，用${IFS}</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20154308.png"></p>
+<p>直接cat,</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20154504.png"></p>
+<p>啥也没有，查看源代码；</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20154531.png"></p>
+<p>NSSCTF{c09a935e-7121-4336-909b-f9e82dd27d79}</p>
+<h2 id="题目三"><a href="#题目三" class="headerlink" title="题目三"></a>题目三</h2><p>[SWPUCTF 2023 秋季新生赛]RCE-PLUS</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20171105.png"></p>
+<ol>
+<li><strong><code>error_reporting(0);</code></strong><ul>
+<li>关闭错误提示，防止泄露敏感信息。</li>
+</ul>
+</li>
+<li><strong><code>highlight_file(__FILE__);</code></strong><ul>
+<li>高亮显示当前文件的源代码。</li>
+</ul>
+</li>
+<li><strong><code>strCheck</code> 函数</strong><ul>
+<li>对用户输入的 <code>cmd</code> 参数进行黑名单过滤。</li>
+<li>黑名单包括：<ul>
+<li>特殊字符：<code>;</code>, <code>&amp;</code>, <code>$</code>, <code>\x09</code>（Tab 键）, <code>\x26</code>（&amp; 的十六进制表示）。</li>
+<li>常见命令：<code>more</code>, <code>less</code>, <code>head</code>, <code>sort</code>, <code>tail</code>, <code>sed</code>, <code>cut</code>, <code>awk</code>, <code>strings</code>, <code>od</code>, <code>php</code>, <code>ping</code>, <code>flag</code>。</li>
+</ul>
+</li>
+<li>如果输入包含黑名单中的内容，程序会终止并输出 <code>i hate this</code>。</li>
+</ul>
+</li>
+<li><strong>命令执行逻辑</strong><ul>
+<li>从 URL 参数 <code>cmd</code> 获取用户输入。</li>
+<li>调用 <code>strCheck</code> 函数对输入进行检查。</li>
+<li>如果通过检查，使用 <code>shell_exec($cmd);</code> 执行命令。</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>黑名单过滤了一些特殊字符和常见命令，但可以通过以下方法绕过：<ul>
+<li><strong>使用未过滤的命令</strong>：<ul>
+<li>例如：<code>ls</code>, <code>cat</code>, <code>tac</code>, <code>nl</code>, <code>rev</code>, <code>grep</code>, <code>find</code>, <code>echo</code> 等。</li>
+</ul>
+</li>
+<li><strong>使用通配符</strong>：<ul>
+<li>例如：<code>*</code> 可以匹配任意字符。</li>
+</ul>
+</li>
+<li><strong>使用未过滤的管道符</strong>：<ul>
+<li>例如：<code>|</code>（管道符）未被过滤，可以用于连接多个命令。</li>
+</ul>
+</li>
+<li><strong>使用编码绕过</strong>：<ul>
+<li>例如：将命令编码为十六进制或 Base64，然后解码执行。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong><code>/?cmd=ls /|tee a.txt</code></strong></p>
+<ol>
+<li><strong><code>tee a.txt</code></strong><ul>
+<li><code>tee</code> 是一个 Linux 命令，用于将输入内容同时输出到屏幕和文件中。</li>
+<li><code>tee a.txt</code> 会将 <code>ls /</code> 的结果输出到屏幕，并保存到 <code>a.txt</code> 文件中。</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20250316171420268.png" alt="image-20250316171420268"></p>
+<p>接着  /?cmd=cat /f*|tee a.txt</p>
+<p>再访问a.xt</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20250316171742247.png" alt="image-20250316171742247"></p>
+<h2 id="题目四"><a href="#题目四" class="headerlink" title="题目四"></a>题目四</h2><p>[SWPUCTF 2023 秋季新生赛]Pingpingping</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20201434.png"></p>
+<p>需要我们以<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=get&amp;spm=1001.2101.3001.7020">get</a>的方式提交参数Ping_ip.exe。然后我们提交的参数会在system()函数中与<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=ping%E5%91%BD%E4%BB%A4&amp;spm=1001.2101.3001.7020">ping命令</a>连接在一起进行执行。</p>
+<p>这里面的ping命令形式是不完整的，所以我们必须要先补全我们的ping命令再进行cat命令抓取。</p>
+<p>ping命令的最基本形式只需包含目标主机的地址。我们只需要将它所给出的ping命令加上主机地址即可。这里我测试的是任何ip都可以。</p>
+<p>?Ping[ip.exe=127.0.0.1||cat /flag</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20201749.png"></p>
+<h2 id="题目五"><a href="#题目五" class="headerlink" title="题目五"></a>题目五</h2><p>[FSCTF 2023]细狗2.0</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/image-20250316172351404.png" alt="image-20250316172351404"></p>
+<p><img src="/.com//Users\lenovo\AppData\Roaming\Typora\typora-user-images\image-20250316172334144.png" alt="image-20250316172334144"></p>
+<p>2.发现有两个php，我们尝试用cat命令查看一下 ,尝试后构造出最终的payload</p>
+<p>过滤了空格和cat 空格用${<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=IFS&amp;spm=1001.2101.3001.7020">IFS</a>}替换就行 cat用nl代替</p>
+<p>1;nl${IFS}/f*</p>
+<p><img src="https://cdn.jsdelivr.net/gh/LLLLLL-del/Image/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-16%20172713.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">It is mine</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/11/27/RCE%E5%AD%A6%E4%B9%A0-%E4%B8%80%E4%BA%9B%E4%BE%8B%E9%A2%98/">http://example.com/2025/11/27/RCE%E5%AD%A6%E4%B9%A0-%E4%B8%80%E4%BA%9B%E4%BE%8B%E9%A2%98/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">运启霖泽</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/image/tx2.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer=""></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/11/27/%E6%97%A0%E5%8F%82RCE%E5%AD%A6%E4%B9%A0-%E4%B8%80/" title="无参RCE学习-一"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">无参RCE学习-一</div></div><div class="info-2"><div class="info-item-1">无参数RCE学习（一）参考： 无参数RCE总结 php手册 视频教学 概念在 不使用可控参数、不依赖外部输入 的情况下，只通过 代码结构本身 或 函数链 达到远程代码执行（RCE）效果。 无参 RCE = 利用某些函数自身的副作用，实现代码执行，而不需要提供参数 不需要像下面这样： 123eval($_GET['cmd']);system($_POST['cmd']);assert($user_input);  而是通过 调用一个函数或一组函数，即使没有用户提供的参数，也能实现任意代码执行或敏感文件读取。 整个攻击链条里：  没有用户可控的字符串作为命令 没有 system("ls") 这种需要写命令的地方 没有 eval($input) 这种可注入的位置  只要能调用某个函数即能触发代码执行。 12345assert();          // 不带参数eval();            // 没参数直接执行前面的残留表达式preg_replace(/e/); // e...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/tx2.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></div><div class="author-info-name">It is mine</div><div class="author-info-description">追光而遇，沐光而行</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RCE%E5%AD%A6%E4%B9%A0-%E4%B8%80%E4%BA%9B%E4%BE%8B%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">RCE学习~一些例题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.</span> <span class="toc-text">一些相关函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E7%9A%84%E5%91%BD%E4%BB%A4"><span class="toc-number">1.2.</span> <span class="toc-text">读取文件的命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E4%B8%80"><span class="toc-number">1.3.</span> <span class="toc-text">题目一</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E4%BA%8C"><span class="toc-number">1.4.</span> <span class="toc-text">题目二</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E4%B8%89"><span class="toc-number">1.5.</span> <span class="toc-text">题目三</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E5%9B%9B"><span class="toc-number">1.6.</span> <span class="toc-text">题目四</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E4%BA%94"><span class="toc-number">1.7.</span> <span class="toc-text">题目五</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/27/RCE%E5%AD%A6%E4%B9%A0-%E4%B8%80%E4%BA%9B%E4%BE%8B%E9%A2%98/" title="RCE学习~一些例题">RCE学习~一些例题</a><time datetime="2025-11-27T13:47:03.000Z" title="发表于 2025-11-27 21:47:03">2025-11-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/27/%E6%97%A0%E5%8F%82RCE%E5%AD%A6%E4%B9%A0-%E4%B8%80/" title="无参RCE学习-一">无参RCE学习-一</a><time datetime="2025-11-27T13:38:31.000Z" title="发表于 2025-11-27 21:38:31">2025-11-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/17/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/" title="数据库学习（一）">数据库学习（一）</a><time datetime="2025-11-17T13:05:42.000Z" title="发表于 2025-11-17 21:05:42">2025-11-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/10/24/polarCTF%E7%AE%80%E5%8D%95web1/" title="polarCTF简单web1">polarCTF简单web1</a><time datetime="2025-10-24T12:20:54.000Z" title="发表于 2025-10-24 20:20:54">2025-10-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/09/09/Linux%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E3%80%81%E7%9B%AE%E5%BD%95%E5%8F%8A%E8%B7%AF%E5%BE%84/" title="Linux用户权限、目录及路径">Linux用户权限、目录及路径</a><time datetime="2025-09-09T08:44:31.000Z" title="发表于 2025-09-09 16:44:31">2025-09-09</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"><div class="copyright">©2019 - 2025 By It is mine</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script src="/styles/fish.js"></script><script async="" data-pjax="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
